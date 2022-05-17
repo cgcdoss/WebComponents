@@ -35,7 +35,7 @@ class StarRater extends HTMLElement {
       star.innerHTML = '&#9733;';
 
       star.addEventListener('click', this.setRating.bind(this));
-      star.addEventListener('mouseover', this.ratingHover.bind(this));
+      star.addEventListener('mousemove', this.ratingHover.bind(this));
 
       return star;
     }
@@ -44,25 +44,57 @@ class StarRater extends HTMLElement {
   }
 
   resetRating() {
-    this.currentRatingValue = this.getAttribute('data-rating') || 0;
+    this.currentRatingValue = parseFloat(this.getAttribute('data-rating')) || 0;
     this.highlightRating();
   }
 
   setRating(event) {
-    this.setAttribute('data-rating', event.currentTarget.getAttribute('data-value'));
+    let currentPositionOverElement = this.getMousePosition(event);
+    let starSelected = event.currentTarget.getAttribute('data-value');
+    let value = starSelected;
+
+    if (currentPositionOverElement < 0.5) {
+      value = starSelected - 0.5;
+    }
+
+    this.setAttribute('data-rating', value);
   }
 
   ratingHover(event) {
-    this.currentRatingValue = event.currentTarget.getAttribute('data-value');
-    this.highlightRating();
+    this.currentRatingValue = parseFloat(event.currentTarget.getAttribute('data-value'));
+
+    let currentPositionOverElement = this.getMousePosition(event);
+
+    this.highlightRating(currentPositionOverElement);
   }
 
-  highlightRating() {
+  getMousePosition(event) {
+    let rect = event.target.getBoundingClientRect();
+    let x = event.clientX - rect.left; // Posição de x dentro do elemento
+    let currentPositionOverElement = x / rect.width;
+    return currentPositionOverElement;
+  }
+
+  highlightRating(currentMousePosition) {
     this.stars.forEach(star => {
       if (this.currentRatingValue >= this.stars.indexOf(star) + 1) { // star.getAttribute('data-value')
-        star.style.color = 'yellow';
+        if (this.currentRatingValue === this.stars.indexOf(star) + 1) { // É a estrela com hover?
+          if (currentMousePosition < 0.5) { // O hover tá antes da metade?
+            star.classList.add('star-half');
+          } else {
+            star.classList.add('star-full');
+            if (this.currentRatingValue % 1 === 0)
+              star.classList.remove('star-half');
+          }
+        } else {
+          star.classList.add('star-full');
+          if (this.currentRatingValue % 1 === 0)
+            star.classList.remove('star-half');
+        }
       } else {
-        star.style.color = 'gray';
+        star.classList.remove('star-full');
+        if (this.currentRatingValue % 1 === 0)
+          star.classList.remove('star-half');
       }
     });
   }
@@ -74,12 +106,16 @@ class StarRater extends HTMLElement {
         font-size: 5rem;
         color: gray;
         cursor: pointer;
-
-        transition: color 0.35s;
       }
 
-      .star:hover {
-        color: darkgray;
+      .star-half {
+        background: linear-gradient(to right, yellow 50%, gray 50%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .star-full {
+        color: yellow;
       }
     `;
     return style;
