@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card teste</title>
+</head>
+
+<body>
+    <h1>Cards:</h1>
+    <app-card>
+        <div slot="header">Aqui um título</div>
+        <div slot="body">Aqui o corpo</div>
+        <div slot="footer">
+            Aqui o rodapé
+            <button class="teste">teste</button>
+        </div>
+    </app-card>
+
+    <style>
+        button.teste {
+            border: none;
+            padding: 8px;
+            background-color: blueviolet;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+
+            transition: background-color 0.25s;
+        }
+
+        button.teste:hover {
+            background-color: violet;
+        }
+    </style>
+    <script src="card-component/Card.js"></script>
+</body>
+
+</html>

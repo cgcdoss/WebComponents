@@ -1,0 +1,42 @@
+<template>
+    <div id="card">
+        <div class="header">
+            <slot name="header"></slot>
+        </div>
+
+        <div class="body">
+            <slot name="body"></slot>
+        </div>
+
+        <div class="footer">
+            <slot name="footer"></slot>
+        </div>
+    </div>
+
+    <style>
+        div#card {
+            width: 450px;
+            box-shadow: grey 2px 2px 5px 0px;
+            padding: 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .header {
+            font-size: 24px;
+            font-family: Helvetica, Arial;
+            margin-bottom: 1rem;
+        }
+
+        .body {
+            color: #0f0;
+            font-family: Helvetica, Arial;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            color: #f00;
+            font-family: Helvetica, Arial;
+        }
+    </style>
+</template>
